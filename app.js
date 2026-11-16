@@ -4,7 +4,7 @@ let teachers = [], schedule = [], activeFloor = 1, selectedRoom = null;
 
 async function loadData(){
   const [t,s] = await Promise.all([
-    fetch('assets/teachers.json').then(r=>{if(!r.ok)throw Error('teachers');return r.json()}),
+   fetch('teachers.json').then(r=>{if(!r.ok)throw Error('teachers');return r.json()}),
     fetch('assets/schedule.json').then(r=>{if(!r.ok)throw Error('schedule');return r.json()})
   ]);
   teachers=t; schedule=s; renderTeachers(); renderSchedule(); setupFilters(); renderMap(1); tick();
