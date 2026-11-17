@@ -74,6 +74,9 @@ const SPACES = {
 const CLASSROOM_IMG = 'assets/classroom.jpg';
 const CORRIDOR_IMG  = 'assets/corridor.jpg';
 
+/* ---------- Яндекс-карта: официальный виджет организации ---------- */
+const MAP_EMBED_URL = 'https://yandex.ru/map-widget/v1/?ll=87.345423%2C53.795502&mode=poi&poi%5Bpoint%5D=87.345309%2C53.795467&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D1013139948&z=17&lang=ru_RU';
+
 /* ---------- направления для фильтра ---------- */
 const CATEGORIES = [
   {label:'Начальные классы',          keys:['начальных']},
@@ -193,7 +196,7 @@ function findInList(value){
 }
 
 /* ============================================================
-   КАРТА: этажи, кабинеты, особые пространства
+   КАРТА: план этажа — коридор, кабинеты по сторонам, лестница
    ============================================================ */
 const FLOOR_NAMES = ['','ПЕРВЫЙ ЭТАЖ','ВТОРОЙ ЭТАЖ','ТРЕТИЙ ЭТАЖ','ЧЕТВЁРТЫЙ ЭТАЖ'];
 const roomStaff = (room) => TEACHERS.filter(t => t._rooms.includes(String(room)));
@@ -220,18 +223,44 @@ function renderMap(floor){
   const rooms = [...new Set(TEACHERS.flatMap(t => t._rooms))]
     .filter(r => /^\d{3}$/.test(r) && Number(r[0]) === floor)
     .sort((a,b) => Number(a) - Number(b));
-  const nodes = floor === 1 ? [...rooms, 'Вход'] : rooms;
 
   $('#roomCount').textContent = rooms.length
     ? `${rooms.length} ${plural(rooms.length, ['кабинет','кабинета','кабинетов'])}${floor === 1 ? ' + вход' : ''}`
     : 'нет данных';
 
-  $('#floorPlan').innerHTML = nodes.length ? nodes.map(r => {
-    if (r === 'Вход') return `<button type="button" class="room special-room" data-room="Вход"><span>Вход</span><small>условно</small></button>`;
+  const plan = $('#floorPlan');
+  if (!rooms.length) {
+    plan.style.gridTemplateColumns = '1fr';
+    plan.style.gridTemplateRows = 'auto';
+    plan.innerHTML = '<div class="empty-state">В списке педагогов нет кабинетов этого уровня.</div>';
+    defaultInfo();
+    return;
+  }
+
+  // кабинеты чередуются по сторонам коридора, как на настоящем плане
+  const top = [], bottom = [];
+  rooms.forEach((r, i) => (i % 2 === 0 ? top : bottom).push(r));
+  if (floor === 1) bottom.unshift('Вход');
+  const cols = Math.max(top.length, bottom.length);
+
+  plan.style.gridTemplateColumns = `52px repeat(${cols}, minmax(76px, 1fr))`;
+  plan.style.gridTemplateRows = '82px 30px 82px';
+
+  const roomBtn = (r, side, col) => {
+    const row = side === 'top' ? 1 : 3;
+    if (r === 'Вход') {
+      return `<button type="button" class="room special-room side-${side}" data-room="Вход" style="grid-column:${col};grid-row:${row}"><span>Вход</span><small>начало маршрута</small></button>`;
+    }
     const staff = roomStaff(r);
     const label = staff.length ? shortName(staff[0].name) : 'кабинет';
-    return `<button type="button" class="room" data-room="${esc(r)}"><span>${esc(r)}</span><small>${esc(label)}</small></button>`;
-  }).join('') : '<div class="empty-state">В списке педагогов нет кабинетов этого уровня.</div>';
+    return `<button type="button" class="room side-${side}" data-room="${esc(r)}" style="grid-column:${col};grid-row:${row}"><span>${esc(r)}</span><small>${esc(label)}</small></button>`;
+  };
+
+  plan.innerHTML =
+    '<div class="plan-stairs" aria-hidden="true"><span>ЛЕСТНИЦА</span></div>' +
+    '<div class="plan-corridor" aria-hidden="true"><span>КОРИДОР</span></div>' +
+    top.map((r, i) => roomBtn(r, 'top', i + 2)).join('') +
+    bottom.map((r, i) => roomBtn(r, 'bottom', i + 2)).join('');
 
   defaultInfo();
 }
@@ -299,6 +328,30 @@ function gotoSpace(name){
   if (!SPACES[name]) return;
   showSpace(name);
   scrollToEl($('#map'));
+}
+
+/* ---------- Яндекс-карта: ленивая загрузка ---------- */
+function setupEmbed(){
+  const box = $('#mapEmbed');
+  const load = () => {
+    if (box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    const f = document.createElement('iframe');
+    f.src = MAP_EMBED_URL;
+    f.title = 'Школа №60 на Яндекс Картах';
+    f.setAttribute('allowfullscreen', '');
+    f.loading = 'lazy';
+    f.addEventListener('load', () => box.classList.add('loaded'));
+    box.appendChild(f);
+  };
+  $('#mapLoadBtn').addEventListener('click', load);
+  // если есть интернет — грузим сами, когда раздел появится на экране
+  if (navigator.onLine) {
+    const io = new IntersectionObserver((es) => {
+      es.forEach(en => { if (en.isIntersecting) { load(); io.disconnect(); } });
+    }, {rootMargin:'250px'});
+    io.observe(box);
+  }
 }
 
 /* ============================================================
@@ -532,7 +585,13 @@ function setupDelegation(){
     const chip = e.target.closest('.space-chip');
     if (chip) showSpace(chip.dataset.space);
   });
-  $$('.polaroid').forEach(p => p.addEventListener('click', () => gotoSpace(p.dataset.space)));
+  $$('.polaroid').forEach(p => p.addEventListener('click', () => {
+    if (p.dataset.space) gotoSpace(p.dataset.space);
+    else if (p.dataset.goto) {
+      const el = document.getElementById(p.dataset.goto);
+      if (el) scrollToEl(el);
+    }
+  }));
   $('#roomInfo').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-find]');
     if (btn) findInList(btn.dataset.find);
@@ -553,3 +612,4 @@ setupScroll();
 setupReveal();
 setupCounters();
 setupDelegation();
+setupEmbed();
