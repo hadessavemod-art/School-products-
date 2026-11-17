@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Школа №60 · Путеводитель</title>
-<meta name="description" content="Цифровой путеводитель по МБУ СОШ №60 Новокузнецка: педагоги, карта кабинетов и живое расписание звонков.">
+<meta name="description" content="Цифровой путеводитель по МБУ СОШ №60 Новокузнецка: педагоги, карта кабинетов, живое расписание звонков и контакты школы.">
 <meta name="theme-color" content="#f6f4ec">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23cfe0d2'/%3E%3Ctext x='32' y='43' font-family='Arial' font-size='26' font-weight='800' text-anchor='middle' fill='%2316333a'%3E60%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
@@ -16,7 +17,6 @@
 </head>
 <body>
 
-<div class="grain" aria-hidden="true"></div>
 <div class="page-progress" aria-hidden="true"><span id="pageProgress"></span></div>
 
 <header class="topbar" id="topbar">
@@ -28,6 +28,7 @@
     <a href="#teachers">Педагоги</a>
     <a href="#map">Карта школы</a>
     <a href="#schedule">Звонки</a>
+    <a href="#contacts">Контакты</a>
     <a href="#about">О проекте</a>
   </nav>
   <a class="top-cta" href="#map">Найти кабинет <span>↗</span></a>
@@ -54,9 +55,9 @@
     <div class="hero-stats reveal">
       <div><b class="stat-num" id="statTeachers" data-count="40">40</b><span>педагогов и сотрудников</span></div>
       <div><b class="stat-num" id="statLessons" data-count="10">10</b><span>уроков в расписании</span></div>
-      <div><b class="stat-num" id="statFloors" data-count="4">4</b><span>этажа с кабинетами</span></div>
+      <div><b class="stat-num" id="statFloors" data-count="4">4</b><span>уровня кабинетов*</span></div>
     </div>
-    <p class="tiny-note reveal">Данные — из списка педагогов школы. Схема этажей навигационная, не архитектурный план.</p>
+    <p class="tiny-note reveal">*Уровни — по первой цифре номера кабинета. Схема навигационная, не архитектурный план.</p>
   </div>
 
   <div class="hero-visual reveal">
@@ -92,7 +93,7 @@
     <h2>Ориентироваться<br><em>стало проще.</em></h2>
   </div>
   <div class="reveal">
-    <p class="intro-text">Путеводитель собрал важную повседневную информацию в одном месте. Больше не нужно искать номер кабинета по разным документам: начните с поиска, откройте карту этажа или посмотрите, какой урок идёт прямо сейчас.</p>
+    <p class="intro-text">Путеводитель собрал важную повседневную информацию в одном месте: поиск педагога, схема кабинетов, живое расписание звонков. А в разделе «Контакты» — официальные соцсети школы и маршрут до неё.</p>
     <div class="polaroids">
       <button class="polaroid p1" type="button" data-space="Библиотека">
         <img src="assets/library.jpg" alt="Школьная библиотека" loading="lazy" onerror="this.remove()">
@@ -101,6 +102,10 @@
       <button class="polaroid p2" type="button" data-space="Спортзал">
         <img src="assets/gym.jpg" alt="Школьный спортзал" loading="lazy" onerror="this.remove()">
         <span>Спортзал ↗</span>
+      </button>
+      <button class="polaroid p3" type="button" data-goto="contacts">
+        <img src="assets/school.jpg" alt="Здание школы №60 со стороны школьного двора" loading="lazy" onerror="this.remove()">
+        <span>Наша школа ↗</span>
       </button>
     </div>
   </div>
@@ -125,11 +130,11 @@
       <input id="teacherSearch" type="search" placeholder="Например: математика, 305, Янц…" autocomplete="off" aria-label="Поиск педагога">
       <kbd aria-hidden="true">/</kbd>
     </label>
-    <select id="subjectFilter" aria-label="Фильтр по направлению"></select>
-    <select id="sortMode" aria-label="Сортировка">
+    <label class="select-wrap"><select id="subjectFilter" aria-label="Фильтр по направлению"></select></label>
+    <label class="select-wrap"><select id="sortMode" aria-label="Сортировка">
       <option value="name">По алфавиту</option>
       <option value="room">По кабинету</option>
-    </select>
+    </select></label>
   </div>
 
   <div class="teacher-grid" id="teacherGrid"></div>
@@ -158,8 +163,9 @@
         <button class="floor-tab" type="button" data-floor="4" role="tab" aria-selected="false">4 этаж</button>
       </div>
       <div class="map-legend">
-        <span><i class="legend-dot"></i>Кабинет из списка</span>
+        <span><i class="legend-dot"></i>Кабинет</span>
         <span><i class="legend-dot special"></i>Особое пространство</span>
+        <span><i class="legend-dot stairs"></i>Лестница</span>
       </div>
     </div>
 
@@ -173,7 +179,9 @@
     <div class="map-layout reveal">
       <div class="floor-plan-wrap">
         <div class="plan-top"><span id="floorTitle">ПЕРВЫЙ ЭТАЖ</span><span>СХЕМА КАБИНЕТОВ</span></div>
-        <div class="floor-plan" id="floorPlan" aria-label="Схема кабинетов этажа"></div>
+        <div class="floor-plan-scroll">
+          <div class="floor-plan" id="floorPlan" aria-label="Схема кабинетов этажа"></div>
+        </div>
         <div class="plan-foot"><span>↖ Условная схема — не архитектурный план</span><span id="roomCount"></span></div>
       </div>
       <aside class="room-info" id="roomInfo" aria-live="polite"></aside>
@@ -216,11 +224,72 @@
   <p class="schedule-footnote">График звонков хранится в данных проекта и обновляется в одном месте. Кнопка «Звонок» проигрывает короткий школьный трель-сигнал.</p>
 </section>
 
+<!-- ================= CONTACTS ================= -->
+<section class="section contacts-section" id="contacts">
+  <div class="section-head reveal">
+    <div>
+      <p class="section-kicker"><span class="kicker-num">04</span>СВЯЗЬ И МАРШРУТ</p>
+      <h2>Школа<br><em>на связи.</em></h2>
+    </div>
+    <p class="contacts-lead">Отдельного сайта у школы нет — все новости, объявления и фото живут в официальных сообществах. А дорогу до школы покажут карты.</p>
+  </div>
+
+  <div class="contacts-layout">
+    <div class="social-col reveal">
+      <a class="social-card" href="https://max.ru/id4219004155_gos" target="_blank" rel="noopener">
+        <span class="social-badge max">MAX</span>
+        <span class="social-body"><b>Мессенджер MAX</b><small>Официальный канал · объявления и связь со школой</small></span>
+        <span class="social-arrow">↗</span>
+      </a>
+      <a class="social-card" href="https://vk.ru/shkola60_nvkz" target="_blank" rel="noopener">
+        <span class="social-badge vk">VK</span>
+        <span class="social-body"><b>ВКонтакте</b><small>Новости, фото и школьные события</small></span>
+        <span class="social-arrow">↗</span>
+      </a>
+      <a class="social-card" href="https://ok.ru/group/70000000768281" target="_blank" rel="noopener">
+        <span class="social-badge ok">OK</span>
+        <span class="social-body"><b>Одноклассники</b><small>Сообщество для родителей и выпускников</small></span>
+        <span class="social-arrow">↗</span>
+      </a>
+      <div class="address-card">
+        <b>АДРЕС ШКОЛЫ</b>
+        <p>г. Новокузнецк, ул. Дузенко, 14А</p>
+        <small>Ориентир — школьный двор с игровой разметкой перед главным входом.</small>
+      </div>
+    </div>
+
+    <div class="route-col reveal">
+      <div class="map-embed" id="mapEmbed">
+        <div class="map-cover">
+          <img src="assets/school.jpg" alt="Здание школы №60" loading="lazy" onerror="this.remove()">
+          <div class="map-cover-overlay" aria-hidden="true"></div>
+          <div class="map-cover-content">
+            <span class="pin-badge" aria-hidden="true">⌖</span>
+            <b>МБУ СОШ №60</b>
+            <small>ул. Дузенко, 14А · Новокузнецк</small>
+            <button class="button light" id="mapLoadBtn" type="button">Показать карту</button>
+            <small class="cover-note">Интерактивная карта загрузится с Яндекс Карт</small>
+          </div>
+        </div>
+      </div>
+      <div class="route-actions">
+        <a class="route-btn" href="https://yandex.ru/maps/org/srednyaya_obshcheobrazovatelnaya_shkola_60/1013139948/?ll=87.345423%2C53.795502&z=16" target="_blank" rel="noopener">
+          <span class="route-badge ya">Я</span>Яндекс Карты ↗
+        </a>
+        <a class="route-btn" href="https://2gis.ru/novokuznetsk/firm/844953211114917" target="_blank" rel="noopener">
+          <span class="route-badge gis">2G</span>2ГИС ↗
+        </a>
+      </div>
+      <p class="route-note">Карта на странице работает при интернете. Кнопки откроют карточку школы в приложениях — там можно построить маршрут от дома.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ================= ABOUT ================= -->
 <section class="section about-section" id="about">
   <div class="about-card reveal">
     <div>
-      <p class="section-kicker"><span class="kicker-num">04</span>О ЦИФРОВОМ ПРОДУКТЕ</p>
+      <p class="section-kicker"><span class="kicker-num">05</span>О ЦИФРОВОМ ПРОДУКТЕ</p>
       <h2>Школа в твоём<br><em>кармане.</em></h2>
       <p>Этот сайт — учебный проект: цифровой путеводитель, который помогает ученикам, родителям и гостям школы быстрее находить нужную информацию.</p>
       <ul class="project-facts">
@@ -230,17 +299,18 @@
       </ul>
       <a class="button primary" href="#home">Вернуться наверх ↑</a>
     </div>
-    <div class="about-art" aria-hidden="true">
-      <div class="art-circle"></div>
-      <div class="art-building">
-        <span>60</span>
-        <i></i><i></i><i></i><i></i><i></i>
-        <i></i><i></i><i></i><i></i><i></i>
-      </div>
-      <div class="art-label">МБУ СОШ №60<br><small>НОВОКУЗНЕЦК · УЛ. ДУЗЕНКО, 14А</small></div>
+    <div class="passport" aria-hidden="true">
+      <div class="passport-head"><span>КАРТОЧКА ПРОЕКТА</span><b>№60</b></div>
+      <div class="passport-row"><span>Продукт</span><b>Цифровой путеводитель</b></div>
+      <div class="passport-row"><span>Школа</span><b>МБУ СОШ №60</b></div>
+      <div class="passport-row"><span>Город</span><b>Новокузнецк</b></div>
+      <div class="passport-row"><span>Адрес</span><b>ул. Дузенко, 14А</b></div>
+      <div class="passport-row"><span>Данные</span><b>40 сотрудников · 10 уроков</b></div>
+      <div class="passport-row"><span>Стек</span><b>HTML · CSS · JS</b></div>
+      <div class="passport-stamp">УЧЕБНЫЙ<br>ПРОЕКТ · 2026</div>
     </div>
   </div>
-  <p class="source-line">Официальный сайт школы: <a href="https://shkola-60.ru/" target="_blank" rel="noopener">shkola-60.ru ↗</a></p>
+  <p class="source-line">Официальные сообщества школы и маршрут — в разделе <a href="#contacts">«Контакты» ↑</a></p>
 </section>
 
 </main>
@@ -250,8 +320,12 @@
     <span class="brand-mark">60</span>
     <span class="brand-text"><b>ШКОЛА №60</b><small>НОВОКУЗНЕЦК</small></span>
   </a>
+  <div class="footer-links">
+    <a href="https://max.ru/id4219004155_gos" target="_blank" rel="noopener">MAX</a>
+    <a href="https://vk.ru/shkola60_nvkz" target="_blank" rel="noopener">ВКонтакте</a>
+    <a href="https://ok.ru/group/70000000768281" target="_blank" rel="noopener">Одноклассники</a>
+  </div>
   <span>Учебный проект · 2026</span>
-  <span>Сделано для удобной навигации</span>
 </footer>
 
 <button class="to-top" id="toTop" type="button" aria-label="Наверх">↑</button>
