@@ -1,76 +1,261 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#102b35">
-  <meta name="description" content="Школьный путеводитель МБУ СОШ №60 города Новокузнецка: педагоги, кабинеты, карта и расписание звонков.">
-  <title>Путеводитель · МБУ СОШ №60</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Школа №60 · Путеводитель</title>
+<meta name="description" content="Цифровой путеводитель по МБУ СОШ №60 Новокузнецка: педагоги, карта кабинетов и живое расписание звонков.">
+<meta name="theme-color" content="#f6f4ec">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23cfe0d2'/%3E%3Ctext x='32' y='43' font-family='Arial' font-size='26' font-weight='800' text-anchor='middle' fill='%2316333a'%3E60%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js');</script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#home" aria-label="На главную"><span class="brand-mark">60</span><span><b>ШКОЛА №60</b><small>ПУТЕВОДИТЕЛЬ</small></span></a>
-  <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
-  <nav id="nav">
-    <a href="#teachers">Педагоги</a><a href="#map">Карта школы</a><a href="#schedule">Звонки</a><a href="#about">О проекте</a>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="page-progress" aria-hidden="true"><span id="pageProgress"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#home" aria-label="Школа №60 — на главную">
+    <span class="brand-mark">60</span>
+    <span class="brand-text"><b>ШКОЛА №60</b><small>ПУТЕВОДИТЕЛЬ</small></span>
+  </a>
+  <nav id="nav" aria-label="Разделы">
+    <a href="#teachers">Педагоги</a>
+    <a href="#map">Карта школы</a>
+    <a href="#schedule">Звонки</a>
+    <a href="#about">О проекте</a>
   </nav>
   <a class="top-cta" href="#map">Найти кабинет <span>↗</span></a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">
+    <span class="mt-open">☰</span><span class="mt-close">✕</span>
+  </button>
 </header>
 
 <main>
+
+<!-- ================= HERO ================= -->
 <section class="hero" id="home">
+  <div class="blob b1" aria-hidden="true"></div>
+  <div class="blob b2" aria-hidden="true"></div>
+
   <div class="hero-copy">
-    <div class="eyebrow"><span class="eyebrow-dot"></span> НОВОКУЗНЕЦК · ШКОЛЬНЫЙ НАВИГАТОР</div>
-    <h1>Всё о школе.<br><em>В одном месте.</em></h1>
-    <p class="hero-lead">Удобный путеводитель по МБУ «Средняя общеобразовательная школа №60». Найдите педагога, узнайте номер кабинета и не пропустите звонок.</p>
-    <div class="hero-actions"><a class="button primary" href="#map">Открыть карту <span>→</span></a><a class="button ghost" href="#teachers">Найти учителя</a></div>
-    <div class="hero-stats"><div><b>40</b><span>педагогов и сотрудников*</span></div><div><b>10</b><span>уроков в расписании</span></div><div><b>4</b><span>уровня кабинетов*</span></div></div>
-    <p class="tiny-note">*По предоставленному списку. Уровни на схеме предварительные.</p>
+    <p class="eyebrow reveal"><span class="eyebrow-dot"></span>НОВОКУЗНЕЦК · ШКОЛЬНЫЙ НАВИГАТОР</p>
+    <h1 class="reveal">Всё о школе.<br><em>В одном месте.</em></h1>
+    <p class="hero-lead reveal">Путеводитель по МБУ «Средняя общеобразовательная школа №60». Найдите педагога, узнайте номер кабинета и не пропустите звонок.</p>
+    <div class="hero-actions reveal">
+      <a class="button primary" href="#map">Открыть карту <span>→</span></a>
+      <a class="button ghost" href="#teachers">Найти учителя</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div><b class="stat-num" id="statTeachers" data-count="40">40</b><span>педагогов и сотрудников</span></div>
+      <div><b class="stat-num" id="statLessons" data-count="10">10</b><span>уроков в расписании</span></div>
+      <div><b class="stat-num" id="statFloors" data-count="4">4</b><span>этажа с кабинетами</span></div>
+    </div>
+    <p class="tiny-note reveal">Данные — из списка педагогов школы. Схема этажей навигационная, не архитектурный план.</p>
   </div>
-  <div class="hero-visual">
-    <div class="photo-frame"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1200&q=85" alt="Светлый школьный коридор" onerror="this.style.display='none';this.parentElement.classList.add('photo-fallback')"><div class="photo-overlay"></div><div class="photo-caption"><span>НАВИГАЦИЯ ПО ШКОЛЕ</span><b>Твой маршрут начинается здесь</b></div></div>
-    <div class="floating-card"><span class="float-icon">⌖</span><div><b>Быстрый поиск</b><small>Кабинет или преподаватель</small></div><span class="float-arrow">↗</span></div>
-    <div class="hero-orbit"></div>
+
+  <div class="hero-visual reveal">
+    <div class="hero-orbit" aria-hidden="true"></div>
+    <figure class="photo-frame">
+      <img src="assets/corridor.jpg" alt="Солнечный школьный коридор с растениями на подоконниках" fetchpriority="high"
+           onerror="this.closest('.photo-frame').classList.add('photo-fallback');this.remove()">
+      <div class="photo-overlay" aria-hidden="true"></div>
+      <figcaption class="photo-caption"><span>МБУ СОШ №60</span><b>Твой маршрут<br>начинается здесь</b></figcaption>
+    </figure>
+    <button class="floating-card" id="quickSearch" type="button">
+      <span class="float-icon">⌕</span>
+      <span class="float-text"><b>Быстрый поиск</b><small>Кабинет или преподаватель</small></span>
+      <span class="float-arrow">↗</span>
+    </button>
   </div>
-  <div class="hero-bottom">ПОНЯТНО · БЫСТРО · УДОБНО <span>ЛИСТАЙТЕ, ЧТОБЫ ИССЛЕДОВАТЬ ↓</span></div>
+
+  <div class="hero-bottom" aria-hidden="true"><span>ПОНЯТНО · БЫСТРО · УДОБНО</span><span class="scroll-hint">ЛИСТАЙТЕ, ЧТОБЫ ИССЛЕДОВАТЬ ↓</span></div>
 </section>
 
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>НАЙТИ ПЕДАГОГА<i>✦</i>ОТКРЫТЬ КАРТУ<i>✦</i>НЕ ПРОПУСТИТЬ ЗВОНОК<i>✦</i>ШКОЛА №60<i>✦</i>НАЙТИ ПЕДАГОГА<i>✦</i>ОТКРЫТЬ КАРТУ<i>✦</i>НЕ ПРОПУСТИТЬ ЗВОНОК<i>✦</i>ШКОЛА №60<i>✦</i></span>
+    <span>НАЙТИ ПЕДАГОГА<i>✦</i>ОТКРЫТЬ КАРТУ<i>✦</i>НЕ ПРОПУСТИТЬ ЗВОНОК<i>✦</i>ШКОЛА №60<i>✦</i>НАЙТИ ПЕДАГОГА<i>✦</i>ОТКРЫТЬ КАРТУ<i>✦</i>НЕ ПРОПУСТИТЬ ЗВОНОК<i>✦</i>ШКОЛА №60<i>✦</i></span>
+  </div>
+</div>
+
+<!-- ================= INTRO ================= -->
 <section class="section intro-grid">
-  <div><div class="section-kicker">ВАША ШКОЛА — БЛИЖЕ</div><h2>Ориентироваться<br>стало проще.</h2></div>
-  <p class="intro-text">Путеводитель собрал важную повседневную информацию в одном цифровом пространстве. Больше не нужно искать номер кабинета по разным документам — начните с поиска или выберите нужный раздел.</p>
-</section>
-
-<section class="section teachers-section" id="teachers">
-  <div class="section-head"><div><div class="section-kicker">КОМАНДА ШКОЛЫ</div><h2>Педагогический<br>состав</h2></div><div class="head-side"><span class="count-pill" id="teacherCount">40 сотрудников</span><p>Поиск по имени, предмету<br>или номеру кабинета.</p></div></div>
-  <div class="search-row"><label class="searchbox"><span>⌕</span><input id="teacherSearch" type="search" placeholder="Например, математика или кабинет 307" aria-label="Поиск учителя"></label><select id="subjectFilter" aria-label="Фильтр по предмету"><option value="">Все направления</option></select></div>
-  <div class="teacher-grid" id="teacherGrid"><div class="loading">Загружаем список педагогов…</div></div>
-  <div class="empty-state" id="teacherEmpty" hidden>Ничего не найдено. Попробуйте изменить запрос.</div>
-  <p class="data-note">Список перенесён из предоставленного документа. Если кабинет не был указан в исходном списке, он обозначен как «уточняется» — мы не стали придумывать данные.</p>
-</section>
-
-<section class="map-section" id="map">
- <div class="section map-inner">
-  <div class="section-head map-head"><div><div class="section-kicker light">ПРОСТРАНСТВО ШКОЛЫ</div><h2>Найди свой<br>кабинет.</h2></div><p>Выберите уровень и нажмите на кабинет, чтобы увидеть, кто там работает. Номера помещений взяты из списка педагогов.</p></div>
-  <div class="map-controls"><div class="floor-tabs" role="tablist" aria-label="Выбор этажа"><button class="floor-tab active" data-floor="1">1 этаж</button><button class="floor-tab" data-floor="2">2 этаж</button><button class="floor-tab" data-floor="3">3 этаж</button><button class="floor-tab" data-floor="4">4 этаж</button></div><div class="map-legend"><span><i class="legend-dot"></i> Кабинет из списка</span><span><i class="legend-dot special"></i> Общее пространство</span></div></div>
-  <div class="map-layout"><div class="floor-plan-wrap"><div class="plan-top"><span id="floorTitle">ПЕРВЫЙ ЭТАЖ</span><span>СХЕМА КАБИНЕТОВ</span></div><div class="floor-plan" id="floorPlan" aria-label="Предварительная схема расположения кабинетов"></div><div class="plan-foot"><span>↖ Условная схема</span><span>Расположение комнат не является архитектурным планом</span></div></div>
-   <aside class="room-info" id="roomInfo"><div class="room-info-icon">⌖</div><div class="section-kicker light">ВЫБЕРИТЕ КАБИНЕТ</div><h3>Информация<br>появится здесь</h3><p>Нажмите на любой номер на схеме, чтобы посмотреть связанные данные.</p><div class="room-info-line"></div><small>МБУ СОШ №60 · Новокузнецк</small></aside>
+  <div class="reveal">
+    <p class="section-kicker">ВАША ШКОЛА — БЛИЖЕ</p>
+    <h2>Ориентироваться<br><em>стало проще.</em></h2>
   </div>
-  <div class="map-disclaimer"><b>Важно:</b> точный поэтажный план школы в открытых источниках подтвердить не удалось. Сейчас это навигационная схема по номерам кабинетов: этаж определяется по первой цифре номера, а взаимное расположение комнат показано условно. Для точной карты потребуется план от школы или фотография схемы эвакуации без персональных данных.</div>
- </div>
+  <div class="reveal">
+    <p class="intro-text">Путеводитель собрал важную повседневную информацию в одном месте. Больше не нужно искать номер кабинета по разным документам: начните с поиска, откройте карту этажа или посмотрите, какой урок идёт прямо сейчас.</p>
+    <div class="polaroids">
+      <button class="polaroid p1" type="button" data-space="Библиотека">
+        <img src="assets/library.jpg" alt="Школьная библиотека" loading="lazy" onerror="this.remove()">
+        <span>Библиотека ↗</span>
+      </button>
+      <button class="polaroid p2" type="button" data-space="Спортзал">
+        <img src="assets/gym.jpg" alt="Школьный спортзал" loading="lazy" onerror="this.remove()">
+        <span>Спортзал ↗</span>
+      </button>
+    </div>
+  </div>
 </section>
 
+<!-- ================= TEACHERS ================= -->
+<section class="section teachers-section" id="teachers">
+  <div class="section-head reveal">
+    <div>
+      <p class="section-kicker"><span class="kicker-num">01</span>КОМАНДА ШКОЛЫ</p>
+      <h2>Педагогический<br><em>состав.</em></h2>
+    </div>
+    <div class="head-side">
+      <span class="count-pill" id="teacherCount">40 сотрудников</span>
+      <p>Поиск по имени, предмету или кабинету.<br>Карточка с кабинетом ведёт прямо на карту.</p>
+    </div>
+  </div>
+
+  <div class="search-row reveal">
+    <label class="searchbox">
+      <span aria-hidden="true">⌕</span>
+      <input id="teacherSearch" type="search" placeholder="Например: математика, 305, Янц…" autocomplete="off" aria-label="Поиск педагога">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <select id="subjectFilter" aria-label="Фильтр по направлению"></select>
+    <select id="sortMode" aria-label="Сортировка">
+      <option value="name">По алфавиту</option>
+      <option value="room">По кабинету</option>
+    </select>
+  </div>
+
+  <div class="teacher-grid" id="teacherGrid"></div>
+  <div class="empty-state" id="teacherEmpty" hidden>
+    Ничего не нашлось. Попробуйте другой запрос или <button class="link-btn" id="resetFilters" type="button">сбросьте фильтры</button>.
+  </div>
+  <p class="data-note reveal">Список перенесён из документа школы. Если кабинет не был указан, он помечен как «уточняется» — мы не придумываем данные.</p>
+</section>
+
+<!-- ================= MAP ================= -->
+<section class="section map-section" id="map">
+  <div class="map-inner">
+    <div class="section-head map-head reveal">
+      <div>
+        <p class="section-kicker light"><span class="kicker-num">02</span>ПРОСТРАНСТВО ШКОЛЫ</p>
+        <h2>Найди свой<br><em>кабинет.</em></h2>
+      </div>
+      <p>Выберите этаж и нажмите на кабинет — покажем, кто в нём работает. Номера помещений взяты из списка педагогов.</p>
+    </div>
+
+    <div class="map-controls reveal">
+      <div class="floor-tabs" role="tablist" aria-label="Этажи">
+        <button class="floor-tab active" type="button" data-floor="1" role="tab" aria-selected="true">1 этаж</button>
+        <button class="floor-tab" type="button" data-floor="2" role="tab" aria-selected="false">2 этаж</button>
+        <button class="floor-tab" type="button" data-floor="3" role="tab" aria-selected="false">3 этаж</button>
+        <button class="floor-tab" type="button" data-floor="4" role="tab" aria-selected="false">4 этаж</button>
+      </div>
+      <div class="map-legend">
+        <span><i class="legend-dot"></i>Кабинет из списка</span>
+        <span><i class="legend-dot special"></i>Особое пространство</span>
+      </div>
+    </div>
+
+    <div class="space-row reveal" id="spaceRow">
+      <button class="space-chip" type="button" data-space="Спортзал"><i></i>Спортзал</button>
+      <button class="space-chip" type="button" data-space="Столовая"><i></i>Столовая</button>
+      <button class="space-chip" type="button" data-space="Библиотека"><i></i>Библиотека</button>
+      <span class="space-hint">Эти пространства — вне нумерации кабинетов</span>
+    </div>
+
+    <div class="map-layout reveal">
+      <div class="floor-plan-wrap">
+        <div class="plan-top"><span id="floorTitle">ПЕРВЫЙ ЭТАЖ</span><span>СХЕМА КАБИНЕТОВ</span></div>
+        <div class="floor-plan" id="floorPlan" aria-label="Схема кабинетов этажа"></div>
+        <div class="plan-foot"><span>↖ Условная схема — не архитектурный план</span><span id="roomCount"></span></div>
+      </div>
+      <aside class="room-info" id="roomInfo" aria-live="polite"></aside>
+    </div>
+
+    <p class="map-disclaimer reveal"><b>Честно о карте.</b> Точный поэтажный план школы в открытых источниках подтвердить не удалось. Сейчас это навигационная схема: этаж определяется по первой цифре номера кабинета, а взаимное расположение комнат условное. Для точной карты понадобится план от школы.</p>
+  </div>
+</section>
+
+<!-- ================= SCHEDULE ================= -->
 <section class="section schedule-section" id="schedule">
- <div class="section-head"><div><div class="section-kicker">ТВОЙ УЧЕБНЫЙ РИТМ</div><h2>Расписание<br>звонков</h2></div><div class="clock-card"><span class="clock-label">ТЕКУЩЕЕ ВРЕМЯ</span><b id="liveClock">--:--:--</b><small id="clockDate">Загрузка даты…</small></div></div>
- <div class="schedule-layout"><div class="schedule-list" id="scheduleList"></div><aside class="next-card"><div class="next-icon">◷</div><div class="section-kicker light">СЕЙЧАС</div><h3 id="nowTitle">Проверяем расписание</h3><p id="nowText">Определяем текущий урок или перемену.</p><div class="progress-track"><span id="timeProgress"></span></div><div class="next-bottom"><span id="progressLabel">—</span><b id="nextTime">—</b></div><small class="schedule-footnote">Время звонков перенесено с предоставленной фотографии.</small></aside></div>
+  <div class="section-head reveal">
+    <div>
+      <p class="section-kicker"><span class="kicker-num">03</span>ТВОЙ УЧЕБНЫЙ РИТМ</p>
+      <h2>Расписание<br><em>звонков.</em></h2>
+    </div>
+    <div class="clock-card">
+      <span class="clock-label">ТЕКУЩЕЕ ВРЕМЯ</span>
+      <b id="liveClock">--:--:--</b>
+      <small id="clockDate">Загрузка даты…</small>
+    </div>
+  </div>
+
+  <div class="schedule-layout">
+    <div class="schedule-list reveal" id="scheduleList"></div>
+    <aside class="next-card reveal">
+      <div class="next-top">
+        <span class="next-icon" id="bellIcon" aria-hidden="true">◷</span>
+        <button class="bell-btn" id="bellBtn" type="button" title="Прослушать школьный звонок">
+          <span class="bell-glyph" aria-hidden="true">♪</span><span id="bellLabel">Звонок</span>
+        </button>
+      </div>
+      <p class="section-kicker">СЕЙЧАС</p>
+      <h3 id="nowTitle">Проверяем расписание…</h3>
+      <p id="nowText">Определяем текущий урок или перемену.</p>
+      <div class="progress-track"><span id="timeProgress"></span></div>
+      <div class="next-bottom"><span id="progressLabel"></span><b id="nextTime"></b></div>
+    </aside>
+  </div>
+  <p class="schedule-footnote">График звонков хранится в данных проекта и обновляется в одном месте. Кнопка «Звонок» проигрывает короткий школьный трель-сигнал.</p>
 </section>
 
+<!-- ================= ABOUT ================= -->
 <section class="section about-section" id="about">
- <div class="about-card"><div><div class="section-kicker">О ЦИФРОВОМ ПРОДУКТЕ</div><h2>Школа в твоём<br><em>кармане.</em></h2><p>Этот сайт создан как учебный проект — цифровой путеводитель, который помогает ученикам, родителям и гостям школы быстрее находить нужную информацию.</p><a class="button primary" href="#home">Вернуться наверх ↑</a></div><div class="about-art"><div class="art-circle"></div><div class="art-building"><span>60</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="art-label">МБУ СОШ №60<br><small>НОВОКУЗНЕЦК</small></div></div></div>
- <div class="source-line">Адрес школы: г. Новокузнецк, ул. Дузенко, 14А. <a href="https://shkola-60.ru/" target="_blank" rel="noopener">Сайт школы ↗</a></div>
+  <div class="about-card reveal">
+    <div>
+      <p class="section-kicker"><span class="kicker-num">04</span>О ЦИФРОВОМ ПРОДУКТЕ</p>
+      <h2>Школа в твоём<br><em>кармане.</em></h2>
+      <p>Этот сайт — учебный проект: цифровой путеводитель, который помогает ученикам, родителям и гостям школы быстрее находить нужную информацию.</p>
+      <ul class="project-facts">
+        <li><b>Цель</b><span>собрать навигацию по школе в одном месте</span></li>
+        <li><b>Данные</b><span>список педагогов школы · расписание звонков</span></li>
+        <li><b>Стек</b><span>HTML · CSS · JavaScript — без сборщиков и фреймворков</span></li>
+      </ul>
+      <a class="button primary" href="#home">Вернуться наверх ↑</a>
+    </div>
+    <div class="about-art" aria-hidden="true">
+      <div class="art-circle"></div>
+      <div class="art-building">
+        <span>60</span>
+        <i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="art-label">МБУ СОШ №60<br><small>НОВОКУЗНЕЦК · УЛ. ДУЗЕНКО, 14А</small></div>
+    </div>
+  </div>
+  <p class="source-line">Официальный сайт школы: <a href="https://shkola-60.ru/" target="_blank" rel="noopener">shkola-60.ru ↗</a></p>
 </section>
+
 </main>
-<footer><a class="brand footer-brand" href="#home"><span class="brand-mark">60</span><span><b>ШКОЛА №60</b><small>ПУТЕВОДИТЕЛЬ</small></span></a><span>Учебный проект · 2026</span><span>Сделано для удобной навигации</span></footer>
+
+<footer>
+  <a class="brand footer-brand" href="#home">
+    <span class="brand-mark">60</span>
+    <span class="brand-text"><b>ШКОЛА №60</b><small>НОВОКУЗНЕЦК</small></span>
+  </a>
+  <span>Учебный проект · 2026</span>
+  <span>Сделано для удобной навигации</span>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="Наверх">↑</button>
+
 <script src="app.js"></script>
-</body></html>
+</body>
+</html>
